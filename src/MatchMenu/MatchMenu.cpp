@@ -70,85 +70,69 @@ void MatchMenu::appendMatch(
         span(ras<const SearchMatch*>(ptr), translationCount);
     ptr += translationCount * sizeof(SearchMatch);
 
-    QString sourceMatchDescs;
+    QStringList sourceMatchDescs;
     vector<Span> sourceSpans;
 
-    sourceMatchDescs.reserve(sourceCount * 13);
+    sourceMatchDescs.reserve(sourceCount);
     sourceSpans.reserve(sourceCount);
-
-    if (sourceCount != 0) {
-        sourceMatchDescs += ": "_L1;
-    }
 
     for (const auto match : sourceMatches) {
         if (match.score == 0.0F) {
-            sourceMatchDescs += tr("Exact");
+            sourceMatchDescs.append(tr("Exact"));
         } else {
-            sourceMatchDescs +=
-                tr("Fuzzy (%1)").arg(QString::number(match.score, 10, 3));
+            sourceMatchDescs.append(
+                tr("Fuzzy (%1)").arg(QString::number(match.score, 10, 3))
+            );
         }
 
         sourceSpans.emplace_back(match.start, match.len);
     }
 
-    QString translationMatchDescs;
+    QStringList translationMatchDescs;
     vector<Span> translationSpans;
 
-    translationMatchDescs.reserve(translationCount * 13);
+    translationMatchDescs.reserve(translationCount);
     translationSpans.reserve(translationCount);
-
-    if (sourceCount != 0) {
-        translationMatchDescs += ": "_L1;
-    }
 
     for (const auto match : translationMatches) {
         if (match.score == 0.0F) {
-            translationMatchDescs +=
-                tr("Fuzzy (%1)").arg(QString::number(match.score, 10, 3));
+            translationMatchDescs.append(tr("Exact"));
         } else {
-            translationMatchDescs += tr("Exact");
+            translationMatchDescs.append(
+                tr("Fuzzy (%1)").arg(QString::number(match.score, 10, 3))
+            );
         }
 
         translationSpans.emplace_back(match.start, match.len);
     }
 
-    auto* const termItem = new QTableWidgetItem(
-        tr("%1 [%2 occurrences%3] -> %4 [%5 occurrences%6]")
-            .arg(termSource)
-            .arg(sourceCount)
-            .arg(sourceMatchDescs)
-            .arg(termTranslation)
-            .arg(translationCount)
-            .arg(translationMatchDescs)
-    );
-    matchTable->setItem(row, 2, termItem);
+    auto* const termOccurrencesItem =
+        new QTableWidgetItem(tr("%1, %2 occurrences, %3")
+                                 .arg(termSource)
+                                 .arg(sourceCount)
+                                 .arg(sourceMatchDescs.join(" ,"_L1)));
+    matchTable->setItem(row, 2, termOccurrencesItem);
 
-    auto* const resultWidget = new QWidget();
-    auto* const resultLayout = new QHBoxLayout(resultWidget);
+    auto* const translationOccurrencesItem =
+        new QTableWidgetItem(tr("%1, %2 occurrences, %3")
+                                 .arg(termTranslation)
+                                 .arg(translationCount)
+                                 .arg(translationMatchDescs.join(" ,"_L1)));
+    matchTable->setItem(row, 3, translationOccurrencesItem);
 
-    const QPalette palette = qApp->palette();
-    const QColor highlightedText =
-        palette.color(QPalette::Active, QPalette::HighlightedText);
-    const QColor text = palette.color(QPalette::Active, QPalette::Text);
     QColor highlightedColor =
-        palette.color(QPalette::Active, QPalette::Highlight);
+        qApp->palette().color(QPalette::Active, QPalette::Highlight);
+    highlightedColor.setAlphaF(0.85F);
 
-    if (highlightedText != text) {
-        highlightedColor = highlightedText;
-    }
-
-    auto* const sourceMatchWidget = new ColoredTextLabel(resultWidget);
+    // TODO: ColoredTextLabel doesn't show anything here
+    auto* const sourceMatchWidget = new ColoredTextLabel(matchTable);
     sourceMatchWidget->setData(source, sourceSpans, highlightedColor);
+    matchTable->setCellWidget(row, 4, sourceMatchWidget);
 
-    auto* const translationMatchWidget = new ColoredTextLabel(resultWidget);
+    auto* const translationMatchWidget = new ColoredTextLabel(matchTable);
     translationMatchWidget
         ->setData(translation, translationSpans, highlightedColor);
-
-    resultLayout->addWidget(sourceMatchWidget);
-    resultLayout->addWidget(new QLabel(u"->"_s, resultWidget));
-    resultLayout->addWidget(translationMatchWidget);
-
-    matchTable->setCellWidget(row, 3, resultWidget);
+    matchTable->setCellWidget(row, 5, translationMatchWidget);
 
     QString info;
     const bool match = sourceCount <= translationCount;
@@ -166,7 +150,9 @@ void MatchMenu::appendMatch(
     }
 
     auto* const infoItem = new QTableWidgetItem(info);
-    matchTable->setItem(row, 4, infoItem);
+    matchTable->setItem(row, 6, infoItem);
+
+    matchTable->resizeColumnsToContents();
 }
 
 void MatchMenu::clear() {

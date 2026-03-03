@@ -890,6 +890,45 @@
      </property>
      <item>
       <widget class="QTableWidget" name="matchMenuTable">
+       <property name="editTriggers">
+        <set>QAbstractItemView::EditTrigger::NoEditTriggers</set>
+       </property>
+       <property name="tabKeyNavigation">
+        <bool>false</bool>
+       </property>
+       <property name="showDropIndicator" stdset="0">
+        <bool>false</bool>
+       </property>
+       <property name="dragDropOverwriteMode">
+        <bool>false</bool>
+       </property>
+       <property name="selectionMode">
+        <enum>QAbstractItemView::SelectionMode::NoSelection</enum>
+       </property>
+       <property name="verticalScrollMode">
+        <enum>QAbstractItemView::ScrollMode::ScrollPerPixel</enum>
+       </property>
+       <property name="horizontalScrollMode">
+        <enum>QAbstractItemView::ScrollMode::ScrollPerPixel</enum>
+       </property>
+       <property name="showGrid">
+        <bool>true</bool>
+       </property>
+       <property name="supportedDragActions">
+        <set>Qt::DropAction::IgnoreAction</set>
+       </property>
+       <attribute name="horizontalHeaderVisible">
+        <bool>true</bool>
+       </attribute>
+       <attribute name="horizontalHeaderHighlightSections">
+        <bool>false</bool>
+       </attribute>
+       <attribute name="verticalHeaderVisible">
+        <bool>false</bool>
+       </attribute>
+       <attribute name="verticalHeaderHighlightSections">
+        <bool>false</bool>
+       </attribute>
        <column>
         <property name="text">
          <string>File</string>
@@ -902,12 +941,22 @@
        </column>
        <column>
         <property name="text">
-         <string>Term</string>
+         <string>Term Occurrences</string>
         </property>
        </column>
        <column>
         <property name="text">
-         <string>Result</string>
+         <string>Translation Occurrences</string>
+        </property>
+       </column>
+       <column>
+        <property name="text">
+         <string>Term Matches</string>
+        </property>
+       </column>
+       <column>
+        <property name="text">
+         <string>Translation Matches</string>
         </property>
        </column>
        <column>
