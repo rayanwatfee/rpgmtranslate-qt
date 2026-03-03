@@ -26,7 +26,7 @@ static auto levelToString(const QtMsgType type) -> QLatin1StringView {
     return "LOG"_L1;
 }
 
-static auto levelToColor(QtMsgType type) -> cstr {
+static auto levelToColor(const QtMsgType type) -> cstr {
     switch (type) {
         case QtDebugMsg:
             return "\033[36m";
@@ -42,14 +42,37 @@ static auto levelToColor(QtMsgType type) -> cstr {
     return "\033[0m";
 }
 
+static auto shortFile(const cstr file) -> cstr {
+    constexpr cstr marker = "/src/";
+    const cstr pos = strstr(file, marker);
+
+    if (pos != nullptr) {
+        return pos + strlen(marker);
+    }
+
+    if (const cstr slash = strrchr(file, '/')) {
+        return slash + 1;
+    }
+
+#ifdef Q_OS_WINDOWS
+    if (const cstr bslash = strrchr(file, '\\')) {
+        return bslash + 1;
+    }
+#endif
+
+    return file;
+}
+
 static void messageHandler(
     const QtMsgType type,
     const QMessageLogContext& ctx,
     const QString& msg
 ) {
-    const QLatin1StringView level = levelToString(type);
-    const QString formatted =
-        "[%1] %2:%3: %4"_L1.arg(level).arg(ctx.file).arg(ctx.line).arg(msg);
+    const QString formatted = "[%1] %2:%3 (%4): %5"_L1.arg(levelToString(type))
+                                  .arg(shortFile(ctx.file))
+                                  .arg(ctx.line)
+                                  .arg(ctx.function)
+                                  .arg(msg);
 
     std::println(
         stdout,
