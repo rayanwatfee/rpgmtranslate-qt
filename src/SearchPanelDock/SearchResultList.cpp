@@ -100,9 +100,9 @@ void SearchResultListDelegate::paint(
     formatRanges.reserve(isize(spans.size()));
     for (const TextMatch span : spans) {
         formatRanges.emplace_back(
-            QTextLayout::FormatRange{ .start = i32(span.start()),
-                                      .length = i32(span.len()),
-                                      .format = highlightedFormat }
+            i32(span.start()),
+            i32(span.len()),
+            highlightedFormat
         );
     }
     textLayout.setFormats(formatRanges);
