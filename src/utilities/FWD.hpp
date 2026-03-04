@@ -47,21 +47,11 @@ class QGridLayout;
 class QPlainTextEdit;
 class QTableWidget;
 
-class OptionMenu;
-class CustomInput;
-class RangeSlider;
-class ScaledLabel;
-class ActionButton;
-class IconTextButton;
-class CustomSlider;
-
 struct ColumnInfo;
 class ProjectSettings;
 
 class Settings;
 class CoreSettings;
-
-class IndexSet;
 
 class AutoUpdater;
 
@@ -89,11 +79,6 @@ class MatchMenu;
 struct MatchModeInfo;
 struct Term;
 struct Glossary;
-struct LineMatches;
-
-class DeferredWrapScrollArea;
-class SearchPanelDock;
-class ColoredTextLabel;
 
 struct FFIString;
 struct ByteBuffer;
