@@ -848,8 +848,12 @@ void TaskWorker::translateSingle(
     array<QString, TRANSLATION_ENDPOINT_COUNT> translations;
 
     TranslationEndpoint endpoint;
+QString localContext;
 
+if (projectSettings->fileContexts.contains(filename)) {
     const QString localContext = projectSettings->fileContexts[filename];
+}
+
     const auto glossaryJSON =
         QJsonDocument(glossary.toJSON()).toJson(QJsonDocument::Compact);
 
