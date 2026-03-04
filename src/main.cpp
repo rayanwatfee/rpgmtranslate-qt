@@ -43,6 +43,10 @@ static auto levelToColor(const QtMsgType type) -> cstr {
 }
 
 static auto shortFile(const cstr file) -> cstr {
+    if (file == nullptr) {
+        return "";
+    }
+
     constexpr cstr marker = "/src/";
     const cstr pos = strstr(file, marker);
 
