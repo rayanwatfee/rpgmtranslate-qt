@@ -5,7 +5,6 @@
 #include "TranslationTableDelegate.hpp"
 #include "TranslationTableHeader.hpp"
 #include "TranslationTableModel.hpp"
-#include "Utils.hpp"
 
 #include <QClipboard>
 #include <QKeyEvent>
@@ -33,7 +32,7 @@ TranslationTable::TranslationTable(QWidget* const parent) :
     setSelectionBehavior(QTableView::SelectItems);
     setSelectionMode(QTableView::ContiguousSelection);
 
-    verticalHeader()->setDefaultAlignment(Qt::AlignLeft);
+    verticalHeader()->setDefaultAlignment(Qt::AlignLeft | Qt::AlignTop);
     verticalHeader()->setSectionsClickable(false);
     verticalHeader()->setHighlightSections(true);
     verticalHeader()->setSectionResizeMode(
@@ -121,7 +120,7 @@ TranslationTable::TranslationTable(QWidget* const parent) :
             return;
         }
 
-        if (!model_->item(index.row(), 1)->isEditable()) {
+        if (!model_->item(index.row(), 1).editable()) {
             return;
         }
 
@@ -138,11 +137,7 @@ TranslationTable::TranslationTable(QWidget* const parent) :
         if (selectedAction == removeRowAction) {
             model_->removeRow(index.row());
         } else if (selectedAction == bookmarkRowAction) {
-            auto* const sourceItem =
-                new QStandardItem(BOOKMARK_COMMENT.toString());
-            sourceItem->setEditable(false);
-
-            model_->insertRow(index.row(), { sourceItem, new QStandardItem() });
+            model_->insertRow(index.row(), { BOOKMARK_COMMENT.toString() });
             emit bookmarked(index.row() + 1);
         }
     }
@@ -168,7 +163,7 @@ TranslationTable::TranslationTable(QWidget* const parent) :
 
     connect(
         model_,
-        &QStandardItemModel::headerDataChanged,
+        &TranslationTableModel::headerDataChanged,
         this,
         [this](
             const Qt::Orientation orientation,
@@ -199,21 +194,21 @@ TranslationTable::TranslationTable(QWidget* const parent) :
         this,
         [this](
             const QModelIndex& /* parent*/,
-            const int first,
-            const int /* last */
+            const i32 first,
+            const i32 /* last */
         ) -> void {
-        const QString sourceText = model_->item(first, 0)->text();
+        const QString* const sourceText = model_->item(first, 0).text();
         auto flags = RowFlags(0);
 
-        if (sourceText.startsWith(COMMENT_PREFIX)) {
+        if (sourceText->startsWith(COMMENT_PREFIX)) {
             flags |= RowFlags::CommentFlag;
 
-            if (sourceText == BOOKMARK_COMMENT) {
+            if (*sourceText == BOOKMARK_COMMENT) {
                 flags |= RowFlags::BookmarkFlag;
             }
         } else {
             for (const u8 column : range<u8>(1, model_->columnCount())) {
-                if (model_->item(first, column)->text().isEmpty()) {
+                if (model_->item(first, column).text()->isEmpty()) {
                     flags |= RowFlags::TranslatedFlag;
                     break;
                 }
@@ -246,9 +241,9 @@ void TranslationTable::insertTranslation(const QString& translation) {
         return;
     }
 
-    auto* const item = model_->itemFromIndex(index);
+    auto item = model_->itemFromIndex(index);
 
-    if (!item->text().isEmpty()) {
+    if (!item.text()->isEmpty()) {
         const auto selected = QMessageBox::question(
             this,
             tr("Cell is not empty"),
@@ -267,7 +262,7 @@ void TranslationTable::insertTranslation(const QString& translation) {
         return;
     }
 
-    item->setText(translation);
+    *item.text() = translation;
 };
 
 void TranslationTable::init(
@@ -277,93 +272,23 @@ void TranslationTable::init(
 ) const {
     delegate->init(algorithm, hint, enabled);
 
-#ifdef ENABLE_HUNSPELL
+#ifdef ENABLE_NUSPELL
     delegate->initializeDictionary();
 #endif
 }
 
-#ifdef ENABLE_HUNSPELL
+#ifdef ENABLE_NUSPELL
 void TranslationTable::initializeDictionary() const {
     delegate->initializeDictionary();
 };
 #endif
-
-void TranslationTable::addRow(
-    const QStringView source,
-    const QSVList& translations
-) {
-    QList<QStandardItem*> items(1 + translations.size());
-    auto* const sourceItem =
-        new QStandardItem(qsvReplace(source, NEW_LINE, LINE_FEED));
-    sourceItem->setEditable(false);
-    sourceItem->setData(true, Qt::UserRole);
-    items[0] = sourceItem;
-
-    for (const auto [column, translation] : views::enumerate(translations)) {
-        items[column + 1] =
-            new QStandardItem(qsvReplace(translation, NEW_LINE, LINE_FEED));
-    }
-
-    model_->appendRow(items);
-}
-
-void TranslationTable::addCommentRow(const QStringView comment) {
-    const bool editable = comment.startsWith(MAP_DISPLAY_NAME_COMMENT_PREFIX) ||
-                          comment.startsWith(BOOKMARK_COMMENT);
-
-    auto* const commentItem = new QStandardItem(
-        editable ? comment.sliced(0, comment.indexOf(SEPARATORL1)).toString()
-                 : comment.toString()
-    );
-    commentItem->setEditable(false);
-
-    auto* const counterpartItem = new QStandardItem();
-    counterpartItem->setEditable(editable);
-
-    if (editable) {
-        const u32 start = comment.indexOf(SEPARATORL1) + SEPARATORL1.size();
-        const isize end = comment.indexOf(SEPARATORL1, start);
-
-        counterpartItem->setText((end == -1
-                                      ? comment.sliced(start)
-                                      : comment.sliced(start, end - start))
-                                     .toString());
-    }
-
-    model_->appendRow({ commentItem, counterpartItem });
-}
 
 void TranslationTable::fill(
     const span<QStringView>& lines,
     const vector<ColumnInfo>& columns,
     const QString& filename
 ) {
-    blockSignals(true);
-    setUpdatesEnabled(false);
-
-    model_->clear();
-
-    for (const auto [row, line] : views::enumerate(lines)) {
-        if (line.trimmed().isEmpty()) {
-            continue;
-        }
-
-        const auto parts = lineParts(line, row, filename);
-
-        if (parts.isEmpty()) {
-            continue;
-        }
-
-        const QStringView source = getSource(parts);
-        const QSVList translations = getTranslations(parts);
-
-        if (source.startsWith(COMMENT_PREFIX)) {
-            addCommentRow(line);
-            continue;
-        }
-
-        addRow(source, translations);
-    }
+    model_->fill(lines, filename);
 
     auto headerLabels = QStringList(model_->columnCount());
 
@@ -372,10 +297,7 @@ void TranslationTable::fill(
         header_->resizeSection(column, columns[column].width);
     }
 
-    model_->setHorizontalHeaderLabels(headerLabels);
-
-    blockSignals(false);
-    setUpdatesEnabled(true);
+    model_->setHeaderLabels(std::move(headerLabels));
 
     viewport()->update();
 }

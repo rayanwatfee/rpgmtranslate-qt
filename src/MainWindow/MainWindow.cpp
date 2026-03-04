@@ -209,7 +209,7 @@ MainWindow::MainWindow(QWidget* const parent) :
 
         QTimer::singleShot(1, [this, row] -> void {
             ui->translationTable->scrollTo(
-                ui->translationTable->model()->index(row, 0),
+                ui->translationTable->model()->index(i32(row), 0),
                 TranslationTable::PositionAtCenter
             );
         });
@@ -399,8 +399,8 @@ MainWindow::MainWindow(QWidget* const parent) :
         }
 
         auto* const popupInput = new PopupInput(this);
-        popupInput->setValidator(new QIntValidator(0, 99999, popupInput));
-        popupInput->setMaxLength(5);
+        popupInput->setValidator(new QIntValidator(0, INT32_MAX, popupInput));
+        popupInput->setMaxLength(10);
         popupInput->setFixedWidth(256);
         popupInput->setPlaceholderText(
             tr("Input line from %1 to %2")
@@ -544,7 +544,7 @@ MainWindow::MainWindow(QWidget* const parent) :
         [this](const u32 row) -> void {
         bookmarkMenu->updateBookmark(
             row,
-            ui->translationTable->model()->item(row, 1)->text()
+            *ui->translationTable->model()->item(i32(row), 1).text()
         );
     }
     );
@@ -1035,16 +1035,18 @@ MainWindow::MainWindow(QWidget* const parent) :
         &TranslationTable::textChanged,
         this,
         [this](const QString& translation) -> void {
+        // TODO: Abort if sourcelanguage and translationlangauge are none
+
         const QModelIndex index = ui->translationTable->currentIndex();
 
         if (!index.isValid()) {
             return;
         }
 
-        const auto* const sourceItem =
+        const auto& sourceItem =
             ui->translationTable->model()->item(index.row(), 0);
 
-        const QString source = sourceItem->text();
+        const QString* const source = sourceItem.text();
 
         if (translation.isEmpty()) {
             return;
@@ -1056,7 +1058,7 @@ MainWindow::MainWindow(QWidget* const parent) :
         for (const Term& term : glossaryMenu->glossary().terms) {
             appendMatches(
                 currentTab,
-                source,
+                QStringView(source->data(), source->size()),
                 translation,
                 term,
                 ui->translationTable->currentIndex().row()
@@ -1070,11 +1072,13 @@ MainWindow::MainWindow(QWidget* const parent) :
         &TranslationTable::inputFocused,
         this,
         [this] -> void {
-        const auto* const sourceItem = ui->translationTable->model()->item(
+        // TODO: Abort if sourcelanguage and translationlangauge are none
+
+        const auto& sourceItem = ui->translationTable->model()->item(
             ui->translationTable->currentIndex().row(),
             0
         );
-        const QString text = sourceItem->text();
+        const QString* const text = sourceItem.text();
         const Glossary glossary = glossaryMenu->glossary();
 
         QMetaObject::invokeMethod(
@@ -1082,7 +1086,7 @@ MainWindow::MainWindow(QWidget* const parent) :
             &TaskWorker::translateSingle,
             Qt::QueuedConnection,
             tabPanel->currentTabName(),
-            text,
+            *text,
             glossary
         );
 
@@ -2692,24 +2696,29 @@ start:
         stream = make_unique<QTextStream>(mapSection, QFile::ReadOnly);
     }
 
-    const TranslationTableModel* const model = ui->translationTable->model();
+    TranslationTableModel* const model = ui->translationTable->model();
 
     for (const i32 row : range(0, model->rowCount())) {
         if ((model->flags(model->index(row, 1)) & Qt::ItemIsEditable) == 0) {
-            *stream << model->item(row, 0)->text();
+            *stream << *model->item(row, 0).text();
         } else {
             auto fields = QStringList(model->columnCount());
 
             for (const u8 column : range<u8>(0, model->columnCount())) {
-                const auto* const item = model->item(row, column);
+                auto item = model->item(row, column);
 
-                if (item == nullptr) {
+                if (item.text()->isNull()) {
                     qWarning() << u"Item at row %1 and column %2 is nullptr."_s
                                       .arg(row, column);
                     continue;
                 }
 
-                fields[column] = item->text().replace('\n', NEW_LINE);
+                const QString* const text = item.text();
+                fields[column] = qsvReplace(
+                    QStringView(text->data(), text->size()),
+                    LINE_FEED,
+                    NEW_LINE
+                );
             }
 
             *stream << fields.join(SEPARATORL1);
@@ -2996,8 +3005,8 @@ void MainWindow::updateTask(
     const u32 total
 ) {
     ui->taskProgressBar->setEnabled(true);
-    ui->taskProgressBar->setMaximum(total);
-    ui->taskProgressBar->setValue(progress);
+    ui->taskProgressBar->setMaximum(i32(total));
+    ui->taskProgressBar->setValue(i32(progress));
 
     const bool finished = progress == total;
 

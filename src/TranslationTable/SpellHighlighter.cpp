@@ -10,19 +10,19 @@
 
 SpellHighlighter::SpellHighlighter(
     const nuspell::Dictionary* const dict,
-    const Algorithm* const* const algorithm_,
+    const Algorithm algorithm,
     QTextDocument* const document
 ) :
     QSyntaxHighlighter(document),
     wordRegex(QRegularExpression(uR"(\b[\p{L}']+\b)"_s)),
     dictionary(dict),
-    algorithm(algorithm_) {
+    algorithm(algorithm) {
     misspelledFormat.setUnderlineStyle(QTextCharFormat::SpellCheckUnderline);
     misspelledFormat.setUnderlineColor(Qt::red);
 }
 
 void SpellHighlighter::highlightBlock(const QString& text) {
-    if (**algorithm == Algorithm::None) {
+    if (algorithm == Algorithm::None) {
         setFormat(0, 0, misspelledFormat);
         return;
     }

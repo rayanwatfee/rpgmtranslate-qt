@@ -2,8 +2,17 @@
 
 #include <QColor>
 
+WhitespaceHighlighter::WhitespaceHighlighter(
+    const bool enabled,
+    QTextDocument* const doc
+) :
+    QSyntaxHighlighter(doc),
+    enabled(enabled) {
+    format.setBackground(QColor(255, 0, 0, 80));
+}
+
 void WhitespaceHighlighter::highlightBlock(const QString& text) {
-    if (!**enabled) {
+    if (!enabled) {
         setFormat(0, 0, format);
         return;
     }
@@ -33,13 +42,4 @@ void WhitespaceHighlighter::highlightBlock(const QString& text) {
     if (trailLen > 0 && trailStart >= lead) {
         setFormat(trailStart, trailLen, format);
     }
-}
-
-WhitespaceHighlighter::WhitespaceHighlighter(
-    const bool* const* const enabled,
-    QTextDocument* const doc
-) :
-    QSyntaxHighlighter(doc),
-    enabled(enabled) {
-    format.setBackground(QColor(255, 0, 0, 80));
 }

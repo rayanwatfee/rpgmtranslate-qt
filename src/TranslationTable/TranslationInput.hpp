@@ -8,10 +8,7 @@ class TranslationInput final : public QPlainTextEdit {
     Q_OBJECT
 
    public:
-    explicit TranslationInput(
-        const u16* const* hint,
-        QWidget* parent = nullptr
-    );
+    explicit TranslationInput(u16 hint, QWidget* parent = nullptr);
 
    protected:
     void keyPressEvent(QKeyEvent* event) override;
@@ -34,7 +31,7 @@ class TranslationInput final : public QPlainTextEdit {
 
     vector<Replacement> lastReplacements;
 
-    const u16* const* const lengthHint;
+    u16 lengthHint;
 
     i32 lastContentHeight = 0;
     bool blockTextChanged = false;

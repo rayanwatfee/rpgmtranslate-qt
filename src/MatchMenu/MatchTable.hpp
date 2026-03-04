@@ -13,7 +13,6 @@ class MatchTableDelegate final : public QStyledItemDelegate {
    public:
     explicit MatchTableDelegate(
         MatchTableModel* model,
-        MatchTable* view,
         QObject* parent = nullptr
     );
 

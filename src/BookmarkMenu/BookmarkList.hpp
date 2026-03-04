@@ -60,7 +60,7 @@ class BookmarkListModel final : public QAbstractListModel {
     void clear();
 
    private:
-    QVector<Bookmark> bookmarks;
+    QList<Bookmark> bookmarks;
 };
 
 class BookmarkProxy final : public QSortFilterProxyModel {

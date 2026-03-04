@@ -46,6 +46,11 @@ class TranslationTableDelegate final : public QStyledItemDelegate {
         const QStyleOptionViewItem& option,
         const QModelIndex& index
     ) const -> QSize override;
+    void paint(
+        QPainter* painter,
+        const QStyleOptionViewItem& option,
+        const QModelIndex& index
+    ) const override;
     auto eventFilter(QObject* editor, QEvent* event) -> bool override;
 
    signals:
@@ -56,6 +61,9 @@ class TranslationTableDelegate final : public QStyledItemDelegate {
 #ifdef ENABLE_NUSPELL
     mutable nuspell::Dictionary dictionary;
 #endif
+
+    static constexpr u8 PAD_X = 4;
+    static constexpr u8 PAD_Y = 4;
 
     const Algorithm* algorithm;
     const u16* lengthHint;

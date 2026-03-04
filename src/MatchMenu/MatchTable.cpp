@@ -16,7 +16,6 @@ struct SearchMatch {
 
 MatchTableDelegate::MatchTableDelegate(
     MatchTableModel* const model,
-    MatchTable* const view,
     QObject* const parent
 ) :
     QStyledItemDelegate(parent),
@@ -31,7 +30,7 @@ void MatchTableDelegate::paint(
         index.column() == MatchTableModel::SourceMatch ||
         index.column() == MatchTableModel::TranslationMatch;
 
-    QStyleOptionViewItem option(opt);
+    auto option = QStyleOptionViewItem(opt);
     initStyleOption(&option, index);
 
     painter->save();
@@ -345,13 +344,13 @@ void MatchTable::appendMatch(
         translationSpans.emplace_back(match.start, match.len);
     }
 
-    QString termOccurrences = tr("%1, %2 occurrences, %3")
+    QString termOccurrences = tr("%1, %2 occurrences: %3")
                                   .arg(termSource)
                                   .arg(sourceCount)
                                   .arg(sourceMatchDescs.join(", "_L1));
 
     QString translationOccurrences =
-        tr("%1, %2 occurrences, %3")
+        tr("%1, %2 occurrences: %3")
             .arg(termTranslation)
             .arg(translationCount)
             .arg(translationMatchDescs.join(", "_L1));

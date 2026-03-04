@@ -13,7 +13,7 @@ class SpellHighlighter final : public QSyntaxHighlighter {
    public:
     explicit SpellHighlighter(
         const nuspell::Dictionary* dict,
-        const Algorithm* const* algorithm,
+        Algorithm algorithm,
         QTextDocument* document
     );
 
@@ -26,7 +26,7 @@ class SpellHighlighter final : public QSyntaxHighlighter {
     QTextCharFormat misspelledFormat;
 
     const nuspell::Dictionary* const dictionary;
-    const Algorithm* const* const algorithm;
+    Algorithm algorithm;
 
     const QRegularExpression wordRegex;
 };

@@ -10,7 +10,9 @@
 #include "SpellHighlighter.hpp"
 #endif
 
+#include <QApplication>
 #include <QModelIndex>
+#include <QPainter>
 #include <QTimer>
 
 TranslationTableDelegate::TranslationTableDelegate(QObject* const parent) :
@@ -27,14 +29,14 @@ auto TranslationTableDelegate::createEditor(
     const QStyleOptionViewItem& /* option */,
     const QModelIndex& index
 ) const -> QWidget* {
-    auto* const editor = new TranslationInput(&lengthHint, parent);
+    auto* const editor = new TranslationInput(*lengthHint, parent);
 
 #ifdef ENABLE_NUSPELL
-    new SpellHighlighter(&dictionary, &algorithm, editor->document());
+    new SpellHighlighter(&dictionary, *algorithm, editor->document());
 #endif
 
     new WhitespaceHighlighter(
-        &whitespaceHighlightingEnabled,
+        *whitespaceHighlightingEnabled,
         editor->document()
     );
 
@@ -103,9 +105,51 @@ auto TranslationTableDelegate::sizeHint(
                              : index.data(Qt::DisplayRole).toString();
 
     const auto fontMetrics = QFontMetrics(option.font);
-    const u32 lines = text.split('\n').count();
+    const u32 lines = text.count('\n') + 1;
     const u32 height = (fontMetrics.lineSpacing() * lines) + 10;
     return { fontMetrics.horizontalAdvance(text), i32(qMax(height, u32(30))) };
+}
+
+void TranslationTableDelegate::paint(
+    QPainter* const painter,
+    const QStyleOptionViewItem& option,
+    const QModelIndex& index
+) const {
+    QStyleOptionViewItem opt = option;
+    initStyleOption(&opt, index);
+
+    QStyle* const style =
+        (opt.widget != nullptr) ? opt.widget->style() : qApp->style();
+
+    style->drawPrimitive(
+        QStyle::PE_PanelItemViewItem,
+        &opt,
+        painter,
+        opt.widget
+    );
+
+    if (!opt.text.isEmpty()) {
+        const QRect paddedRect =
+            opt.rect.adjusted(PAD_X, PAD_Y, -PAD_X, -PAD_Y);
+
+        const QPalette::ColorRole textRole =
+            ((opt.state & QStyle::State_Selected) != 0)
+                ? QPalette::HighlightedText
+                : QPalette::Text;
+
+        painter->save();
+        painter->setFont(opt.font);
+        style->drawItemText(
+            painter,
+            paddedRect,
+            i32(opt.displayAlignment),
+            opt.palette,
+            (opt.state & QStyle::State_Enabled) != 0,
+            opt.text,
+            textRole
+        );
+        painter->restore();
+    }
 }
 
 auto TranslationTableDelegate::eventFilter(

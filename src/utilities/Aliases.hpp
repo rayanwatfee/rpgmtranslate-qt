@@ -2,6 +2,7 @@
 
 #include <QString>
 #include <atomic>
+#include <bitset>
 #include <cstddef>
 #include <expected>
 #include <filesystem>
@@ -54,6 +55,7 @@ using atomicI64 = std::atomic_int64_t;
 
 using fs::path;
 using std::array;
+using std::bitset;
 using std::cerr;
 using std::cout;
 using std::expected;

@@ -7,10 +7,7 @@
 #include <QTextBlock>
 #include <QTextCursor>
 
-TranslationInput::TranslationInput(
-    const u16* const* const hint,
-    QWidget* const parent
-) :
+TranslationInput::TranslationInput(const u16 hint, QWidget* const parent) :
     QPlainTextEdit(parent),
     lengthHint(hint) {
     setWordWrapMode(QTextOption::WrapAtWordBoundaryOrAnywhere);
@@ -132,8 +129,7 @@ void TranslationInput::performAutoReplacements() {
 void TranslationInput::paintEvent(QPaintEvent* const event) {
     QPlainTextEdit::paintEvent(event);
 
-    const u16 hint = **lengthHint;
-    if (hint == 0) {
+    if (lengthHint == 0) {
         return;
     }
 
@@ -142,8 +138,8 @@ void TranslationInput::paintEvent(QPaintEvent* const event) {
 
     const int charWidth = fontMetrics().horizontalAdvance(' ');
 
-    const int xPos =
-        contentOffset().x() + document()->documentMargin() + (charWidth * hint);
+    const int xPos = contentOffset().x() + document()->documentMargin() +
+                     (charWidth * lengthHint);
 
     painter.drawLine(xPos, 0, xPos, viewport()->height());
 };

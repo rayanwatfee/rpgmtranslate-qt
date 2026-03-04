@@ -5,7 +5,6 @@
 
 #include <QJsonArray>
 #include <QJsonObject>
-#include <bitset>
 
 struct MatchModeInfo {
     f32 fuzzyThreshold;
@@ -212,8 +211,8 @@ inline auto u16ToAscii(u16 number) -> array<char, 4> {
 }
 
 struct Selected {
-    std::bitset<2048> mapIndices = 0;
-    std::bitset<2048> validIndices = 0;
+    bitset<2048> mapIndices = 0;
+    bitset<2048> validIndices = 0;
     u16 mapCount = 0;
     FileFlags flags = FileFlags(0);
 
