@@ -14,7 +14,7 @@ panic = "abort"
 strip = "symbols"
 
 [dependencies]
-language-tokenizer = { version = "0.2.0", features = ["snowball"], path = "../../language-tokenizer" }
+language-tokenizer = { version = "0.1.0", features = ["snowball"] }
 llm-connector = "0.8.1"
 log = "0.4.29"
 num_enum = "0.7.5"
