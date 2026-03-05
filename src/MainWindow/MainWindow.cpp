@@ -36,6 +36,10 @@
 #include <QTranslator>
 #include <QVersionNumber>
 
+#ifdef Q_OS_WINDOWS
+#include <bit7z/bitarchivereader.hpp>
+#endif
+
 // TODO: Display entry in search panel/bookmark menu, but make it optional
 // through settings.
 // TODO: Button to open the current project in explorer.
@@ -1716,15 +1720,15 @@ void MainWindow::checkForUpdates(bool manual) {
         const QString exePath = qApp->applicationFilePath();
         QFile::rename(exePath, appDir + u"/rpgmtranslate-old.exe");
 
-        const Bit7zLibrary lib(appDir.toStdString() + "/7zxa.dll");
+        const bit7z::Bit7zLibrary lib(appDir.toStdString() + "/7zxa.dll");
 
-        vector<byte_t> archiveVec(archiveData.size());
+        vector<bit7z::byte_t> archiveVec(archiveData.size());
         memcpy(archiveVec.data(), archiveData.data(), archiveData.size());
 
-        const BitArchiveReader archive{ lib,
-                                        archiveVec,
-                                        ArchiveStartOffset::None,
-                                        BitFormat::SevenZip };
+        const bit7z::BitArchiveReader archive{ lib,
+                                               archiveVec,
+                                               bit7z::ArchiveStartOffset::None,
+                                               bit7z::BitFormat::SevenZip };
 
         vector<u32> indicesToExtract;
 
